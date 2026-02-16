@@ -1,0 +1,1 @@
+alert("Hi, welcome to the JavaScript Flash Course!");
