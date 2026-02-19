@@ -82,24 +82,6 @@ if (currentHour < 12) {
   greetingText = "Welcome!";
 }
 document.querySelector("#greeting").innerHTML = greetingText;
-
-const weatherCondition = "sunny";
-const userLocation = "New York";
-let temperature = 30;
-
-let celsiusText = `The weather is ${weatherCondition} in ${userLocation} and the temperature is ${temperature.toFixed(2)}°C.`;
-let fahrText = `The weather is ${weatherCondition} in ${userLocation} and the temperature is ${celsiusToFahrenheit(temperature).toFixed(2)}°F.`;
-document.querySelector("p#weather").innerHTML = celsiusText;
-
-
-document.querySelector(".weather-group").addEventListener("click", function(e){
-  if (e.target.id === "celsius") {
-    document.querySelector("p#weather").innerHTML = celsiusText;
-  } else if (e.target.id === "fahr") {
-    document.querySelector("p#weather").innerHTML = fahrText;
-  }
-
-});
 }
 
 function clockHandler() {
@@ -234,17 +216,35 @@ function footerHandler(){
   document.querySelector("footer").innerHTML = `© ${currentYear} - All rights reserved.`;
 }
 
+function weatherHandler() {
+let temperature = 30;
 navigator.geolocation.getCurrentPosition((position) => {
   fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`)
     .then((response) => response.json())
     .then((data) => {
+      console.log("Location data:", data);
       document.querySelector("#greeting").innerHTML += ` from ${data.city}, ${data.countryName}`;
+      let celsiusText = `The weather is sunny in ${data.city} and the temperature is ${temperature.toFixed(2)}°C.`;
+      let fahrText = `The weather is sunny in ${data.city} and the temperature is ${celsiusToFahrenheit(temperature).toFixed(2)}°F.`;
+      document.querySelector("p#weather").innerHTML = celsiusText;
+
+      document.querySelector(".weather-group").addEventListener("click", function(e){
+      if (e.target.id === "celsius") {
+        document.querySelector("p#weather").innerHTML = celsiusText;
+      } else if (e.target.id === "fahr") {
+        document.querySelector("p#weather").innerHTML = fahrText;
+      }
+      });
+
     })
     .catch((error) => {
       console.error("Error fetching location data:", error);
     });
 }
 );
+}
+
+
 //page load
 window.addEventListener("load", () => {
   menuHandler();
@@ -254,5 +254,6 @@ window.addEventListener("load", () => {
   populateProducts();
   productsHandler();
   footerHandler();
+  weatherHandler();
 
 });
