@@ -7,7 +7,17 @@ document.querySelector("#close-nav-menu").addEventListener("click", () => {
   document.querySelector("header nav .wrapper").classList.remove("nav-open");
 });
 //Greeting section
-const greetingText = "Good Afternoon";
+let  greetingText;
+let currentHour = new Date().getHours();
+if (currentHour < 12) {
+  greetingText = "Good Morning";
+} else if (currentHour < 19) {
+  greetingText = "Good Afternoon";
+} else if (currentHour < 24) {
+  greetingText = "Good Evening";
+} else {
+  greetingText = "Welcome!";
+}
 document.querySelector("#greeting").innerHTML = greetingText;
 const weatherCondition = "sunny";
 const userLocation = "New York";
