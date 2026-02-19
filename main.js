@@ -160,6 +160,7 @@ function filterProducts(filter) {
   });
 }
 function productsHandler() {
+let productsSection = document.querySelector(".products-area");
 document.querySelector(".products-filter label[for='all'] span.product-amount").textContent = products.length;
 document.querySelector(".products-filter label[for='paid'] span.product-amount").textContent = filterProducts("paid").length;
 document.querySelector(".products-filter label[for='free'] span.product-amount").textContent = filterProducts("free").length;
@@ -178,6 +179,16 @@ document.querySelector(".products-filter label[for='free'] span.product-amount")
 function populateProducts(filter = "all") {
   const productsElm = document.querySelector(".products-area");
   productsElm.innerHTML = "";
+  let productFilter = document.querySelector(`.products-filter`);
+  productFilter.addEventListener("click", (e) => {
+    if (e.target.id === "all") {
+      populateProducts(products);
+    }else if (e.target.id === "paid") {
+      populateProducts(filterProducts("paid"));
+    } else if (e.target.id === "free") {
+      populateProducts(filterProducts("free"));
+    }
+  });
 
   filterProducts(filter).forEach((product) => {
     const productElm = document.createElement("div");
@@ -218,8 +229,22 @@ function populateProducts(filter = "all") {
     productsElm.appendChild(productElm);
   });
 }
+function footerHandler(){
+  let currentYear = new Date().getFullYear();
+  document.querySelector("footer").innerHTML = `© ${currentYear} - All rights reserved.`;
+}
 
-
+navigator.geolocation.getCurrentPosition((position) => {
+  fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&localityLanguage=en`)
+    .then((response) => response.json())
+    .then((data) => {
+      document.querySelector("#greeting").innerHTML += ` from ${data.city}, ${data.countryName}`;
+    })
+    .catch((error) => {
+      console.error("Error fetching location data:", error);
+    });
+}
+);
 //page load
 window.addEventListener("load", () => {
   menuHandler();
@@ -228,5 +253,6 @@ window.addEventListener("load", () => {
   galleryHandler();
   populateProducts();
   productsHandler();
+  footerHandler();
 
 });
