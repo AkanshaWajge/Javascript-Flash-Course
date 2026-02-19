@@ -1,51 +1,3 @@
-//menu
-document.querySelector("#open-nav-menu").addEventListener("click", () => {
-  document.querySelector("header nav .wrapper").classList.add("nav-open");
-});
-
-document.querySelector("#close-nav-menu").addEventListener("click", () => {
-  document.querySelector("header nav .wrapper").classList.remove("nav-open");
-});
-//Greeting section
-let  greetingText;
-let currentHour = new Date().getHours();
-if (currentHour < 12) {
-  greetingText = "Good Morning";
-} else if (currentHour < 19) {
-  greetingText = "Good Afternoon";
-} else if (currentHour < 24) {
-  greetingText = "Good Evening";
-} else {
-  greetingText = "Welcome!";
-}
-document.querySelector("#greeting").innerHTML = greetingText;
-const weatherCondition = "sunny";
-const userLocation = "New York";
-let temperature = 30;
-let celsiusText = `The weather is ${weatherCondition} in ${userLocation} and the temperature is ${temperature.toFixed(2)}°C.`;
-let fahrText = `The weather is ${weatherCondition} in ${userLocation} and the temperature is ${celsiusToFahrenheit(temperature).toFixed(2)}°F.`;
-document.querySelector("p#weather").innerHTML = celsiusText;
-
-//Function to convert Celsius to Fahrenheit
-function celsiusToFahrenheit(celsius) {
-  return (celsius * 9) / 5 + 32;
-}
-document.querySelector(".weather-group").addEventListener("click", (event) => {
-  if (event.target.id === "celsius") {
-    document.querySelector("p#weather").innerHTML = celsiusText;
-  } else if (event.target.id === "fahrenheit") {
-    document.querySelector("p#weather").innerHTML = fahrText;
-  }
-
-})
-//Local time section
-setInterval(() => {
-  const localTime = new Date();
-  document.querySelector("span[data-time='hours']").innerHTML = localTime.getHours().toString().padStart(2, "0");
-  document.querySelector("span[data-time='minutes']").innerHTML = localTime.getMinutes().toString().padStart(2, "0");
-  document.querySelector("span[data-time='seconds']").innerHTML = localTime.getSeconds().toString().padStart(2, "0");
-}, 1000);
-
 const galleryImages = [
    {
     src: "./assets/gallery/image1.jpg",
@@ -60,7 +12,67 @@ const galleryImages = [
     alt: "Thumbnail Image 3"
   }
 ];
+//Menu
+function menuHandler() {
+  document.querySelector("#open-nav-menu").addEventListener("click", () => {
+  document.querySelector("header nav .wrapper").classList.add("nav-open");
+});
 
+document.querySelector("#close-nav-menu").addEventListener("click", () => {
+  document.querySelector("header nav .wrapper").classList.remove("nav-open");
+});
+}
+//Function to convert Celsius to Fahrenheit
+function celsiusToFahrenheit(celsius) {
+  let fahr =  (celsius * 9/5)+ 32;
+  return fahr;
+}
+
+//Greeting section
+function greetingHandler() {
+let  greetingText;
+let currentHour = new Date().getHours();
+if (currentHour < 12) {
+  greetingText = "Good Morning";
+} else if (currentHour < 19) {
+  greetingText = "Good Afternoon";
+} else if (currentHour < 24) {
+  greetingText = "Good Evening";
+} else {
+  greetingText = "Welcome!";
+}
+document.querySelector("#greeting").innerHTML = greetingText;
+
+const weatherCondition = "sunny";
+const userLocation = "New York";
+let temperature = 30;
+
+let celsiusText = `The weather is ${weatherCondition} in ${userLocation} and the temperature is ${temperature.toFixed(2)}°C.`;
+let fahrText = `The weather is ${weatherCondition} in ${userLocation} and the temperature is ${celsiusToFahrenheit(temperature).toFixed(2)}°F.`;
+document.querySelector("p#weather").innerHTML = celsiusText;
+
+
+document.querySelector(".weather-group").addEventListener("click", function(e){
+  if (e.target.id === "celsius") {
+    document.querySelector("p#weather").innerHTML = celsiusText;
+  } else if (e.target.id === "fahr") {
+    document.querySelector("p#weather").innerHTML = fahrText;
+  }
+
+});
+}
+
+function clockHandler() {
+//Local time section
+setInterval(() => {
+  const localTime = new Date();
+  document.querySelector("span[data-time='hours']").innerHTML = localTime.getHours().toString().padStart(2, "0");
+  document.querySelector("span[data-time='minutes']").innerHTML = localTime.getMinutes().toString().padStart(2, "0");
+  document.querySelector("span[data-time='seconds']").innerHTML = localTime.getSeconds().toString().padStart(2, "0");
+}, 1000);
+}
+//Gallery section
+function galleryHandler() {
 let mainImage = document.querySelector("#gallery > img");
 let thumbnails = document.querySelector("#gallery .thumbnails");
 mainImage.src = galleryImages[0].src;
@@ -86,3 +98,12 @@ galleryImages.forEach(function(image, index) {
   });
   thumbnails.appendChild(thumb);
 })
+}
+
+//page load
+window.addEventListener("load", () => {
+  menuHandler();
+  greetingHandler();
+  clockHandler();
+  galleryHandler();
+});
