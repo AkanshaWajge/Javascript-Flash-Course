@@ -156,10 +156,14 @@ function filterProducts(filter) {
         return product.price > 0;
       case "free":
         return product.price === 0;
-    }
+    } 
   });
 }
-
+function productsHandler() {
+document.querySelector(".products-filter label[for='all'] span.product-amount").textContent = products.length;
+document.querySelector(".products-filter label[for='paid'] span.product-amount").textContent = filterProducts("paid").length;
+document.querySelector(".products-filter label[for='free'] span.product-amount").textContent = filterProducts("free").length;
+}
 // populates a webpage with product information by creating and appending HTML elements to 
 // the element with the class "products-area". The function takes an optional filter parameter 
 // with a default value of "all" which is passed to the "filterProducts" function to filter the 
@@ -223,5 +227,6 @@ window.addEventListener("load", () => {
   clockHandler();
   galleryHandler();
   populateProducts();
+  productsHandler();
 
 });
