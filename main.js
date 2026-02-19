@@ -28,10 +28,51 @@ document.querySelector(".weather-group").addEventListener("click", (event) => {
   }
 
 })
-
+//Local time section
 setInterval(() => {
   const localTime = new Date();
   document.querySelector("span[data-time='hours']").innerHTML = localTime.getHours().toString().padStart(2, "0");
   document.querySelector("span[data-time='minutes']").innerHTML = localTime.getMinutes().toString().padStart(2, "0");
   document.querySelector("span[data-time='seconds']").innerHTML = localTime.getSeconds().toString().padStart(2, "0");
 }, 1000);
+
+const galleryImages = [
+   {
+    src: "./assets/gallery/image1.jpg",
+    alt: "Thumbnail Image 1"
+  },
+  {
+    src: "./assets/gallery/image2.jpg",
+    alt: "Thumbnail Image 2"
+  },
+  {
+    src: "./assets/gallery/image3.jpg",
+    alt: "Thumbnail Image 3"
+  }
+];
+
+let mainImage = document.querySelector("#gallery > img");
+let thumbnails = document.querySelector("#gallery .thumbnails");
+mainImage.src = galleryImages[0].src;
+mainImage.alt = galleryImages[0].alt;
+
+galleryImages.forEach(function(image, index) {
+  let thumb = document.createElement("img");
+  thumb.src = image.src;
+  thumb.alt = image.alt;
+  thumb.dataset.arrayIndex = index;
+  thumb.dataset.selected = index === 0 ? "true" : "false";
+  thumb.addEventListener("click", (e) => {
+    let selectedIndex = e.target.dataset.arrayIndex;
+    let selectedImage = galleryImages[selectedIndex];
+    mainImage.src = selectedImage.src;
+    mainImage.alt = selectedImage.alt;
+
+    thumbnails.querySelectorAll("img").forEach(function(img) {
+      img.dataset.selected = false;
+    });
+
+    e.target.dataset.selected = "true";
+  });
+  thumbnails.appendChild(thumb);
+})
