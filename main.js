@@ -12,6 +12,46 @@ const galleryImages = [
     alt: "Thumbnail Image 3"
   }
 ];
+
+const products = [
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 49.9,
+    image: "./assets/products/img6.png",
+  },
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 35,
+    image: "./assets/products/img1.png",
+  },
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 0,
+    image: "./assets/products/img2.png",
+  },
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 85.35,
+    image: "./assets/products/img3.png",
+  },
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 0,
+    image: "./assets/products/img5.png",
+  },
+  {
+    title: "AstroFiction",
+    author: "John Doe",
+    price: 45,
+    image: "./assets/products/img4.png",
+  },
+];
+
 //Menu
 function menuHandler() {
   document.querySelector("#open-nav-menu").addEventListener("click", () => {
@@ -100,10 +140,88 @@ galleryImages.forEach(function(image, index) {
 })
 }
 
+
+// filters an array of products based on the provided filter parameter.
+//  The function takes a filter parameter and it returns a new filtered array of products. 
+// It uses the Array.prototype.filter() method to filter the products array based on the filter parameter.
+//  The filter parameter can be "all", "paid" or "free". If the filter parameter is "all", it returns all 
+// the products in the array. If the filter parameter is "paid", it returns the products that have a price 
+// greater than zero. If the filter parameter is "free", it returns the products that have a price equal to zero.
+function filterProducts(filter) {
+  return products.filter((product) => {
+    switch (filter) {
+      case "all":
+        return true;
+      case "paid":
+        return product.price > 0;
+      case "free":
+        return product.price === 0;
+    }
+  });
+}
+
+// populates a webpage with product information by creating and appending HTML elements to 
+// the element with the class "products-area". The function takes an optional filter parameter 
+// with a default value of "all" which is passed to the "filterProducts" function to filter the 
+// products that are displayed. It first clears the contents of the "products-area" element
+// using innerHTML = ""; Then for each product in the filtered array it creates a "div" element 
+// with class "product-item" and appends it to the "products-area" element. Then it creates an "img" 
+// element to display the product image, and a "div" element with class "product-details" to hold the 
+// product title, author and price. it creates "h3","p" elements for title, author and price respectively 
+// and then it appends the created elements to the "div" element with class "product-details" ,
+//  then the image and the details to the "product-item" element and finally it appends the "product-item"
+// element to the "products-area"
+function populateProducts(filter = "all") {
+  const productsElm = document.querySelector(".products-area");
+  productsElm.innerHTML = "";
+
+  filterProducts(filter).forEach((product) => {
+    const productElm = document.createElement("div");
+    productElm.classList.add("product-item");
+
+    const productImage = document.createElement("img");
+    productImage.src = product.image;
+    productImage.alt = product.title;
+
+    const productDetails = document.createElement("div");
+    productDetails.classList.add("product-details");
+
+    const productTitle = document.createElement("h3");
+    productTitle.classList.add("product-title");
+    productTitle.textContent = product.title;
+
+    const productAuthor = document.createElement("p");
+    productAuthor.classList.add("product-author");
+    productAuthor.textContent = product.author;
+
+    const productPriceTitle = document.createElement("p");
+    productPriceTitle.classList.add("price-title");
+    productPriceTitle.textContent = "Price";
+
+    const productPrice = document.createElement("p");
+    productPrice.classList.add("product-price");
+    productPrice.textContent =
+      product.price > 0 ? `$ ${product.price.toFixed(2)}` : "Free";
+
+    productDetails.appendChild(productTitle);
+    productDetails.appendChild(productAuthor);
+    productDetails.appendChild(productPriceTitle);
+    productDetails.appendChild(productPrice);
+
+    productElm.appendChild(productImage);
+    productElm.appendChild(productDetails);
+
+    productsElm.appendChild(productElm);
+  });
+}
+
+
 //page load
 window.addEventListener("load", () => {
   menuHandler();
   greetingHandler();
   clockHandler();
   galleryHandler();
+  populateProducts();
+
 });
